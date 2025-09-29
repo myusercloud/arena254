@@ -3,18 +3,28 @@ from django.http import JsonResponse
 from .models import Product
 
 def index(request):
+    """
+    Render the homepage with all products displayed as cards.
+    """
     products = Product.objects.prefetch_related('images').all()
     return render(request, 'store/index.html', {'products': products})
 
+
 def product_detail_json(request, pk):
-    p = get_object_or_404(Product, pk=pk)
-    images = [request.build_absolute_uri(img.image.url) for img in p.images.all()]
+    """
+    Return product details as JSON for the modal view.
+    """
+    product = get_object_or_404(Product, pk=pk)
+
+    # Build absolute URLs for images
+    images = [request.build_absolute_uri(img.image.url) for img in product.images.all()]
+    
     data = {
-        'id': p.id,
-        'title': p.title,
-        'description': p.description,
-        'price': str(p.price) if p.price else None,
-        'featured_image': request.build_absolute_uri(p.featured_image.url) if p.featured_image else None,
+        'id': product.id,
+        'title': product.title,
+        'description': product.description,
+        'price': str(product.price) if product.price else None,
+        'featured_image': request.build_absolute_uri(product.featured_image.url) if product.featured_image else None,
         'images': images,
     }
     return JsonResponse(data)

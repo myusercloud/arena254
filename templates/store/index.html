@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+  <div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm">
+        {% if product.featured_image %}
+          <img src="{{ product.featured_image.url }}" class="card-img-top" alt="{{ product.title }}">
+        {% endif %}
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ product.title }}</h5>
+          {% if product.price %}<p class="card-text text-muted">KSh {{ product.price }}</p>{% endif %}
+          <button class="btn btn-primary mt-auto view-product-btn"
+                  data-product-id="{{ product.id }}"
+                  data-bs-toggle="modal"
+                  data-bs-target="#productModal">
+            View Details
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner" id="productCarouselInner"></div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+        <p id="productDescription" class="mt-3"></p>
+        <p id="productPrice" class="fw-bold"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modalLabel = document.getElementById('productModalLabel');
+  const modalCarouselInner = document.getElementById('productCarouselInner');
+  const productDescription = document.getElementById('productDescription');
+  const productPrice = document.getElementById('productPrice');
+
+  document.querySelectorAll('.view-product-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.productId;
+      try {
+        const res = await fetch(`/api/product/${id}/`);
+        if (!res.ok) throw new Error('Network error');
+        const data = await res.json();
+        modalLabel.textContent = data.title;
+        productDescription.textContent = data.description || '';
+        productPrice.textContent = data.price ? `KSh ${data.price}` : '';
+        modalCarouselInner.innerHTML = '';
+        const images = (data.images && data.images.length) ? data.images : (data.featured_image ? [data.featured_image] : []);
+        images.forEach((src, idx) => {
+          const div = document.createElement('div');
+          div.className = 'carousel-item' + (idx === 0 ? ' active' : '');
+          div.innerHTML = `<img src="${src}" class="d-block w-100" alt="${data.title}">`;
+          modalCarouselInner.appendChild(div);
+        });
+      } catch (err) {
+        modalLabel.textContent = 'Error';
+        productDescription.textContent = 'Could not load product details.';
+        modalCarouselInner.innerHTML = '';
+        productPrice.textContent = '';
+        console.error(err);
+      }
+    });
+  });
+});
+</script>
+{% endblock %}
