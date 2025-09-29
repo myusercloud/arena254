@@ -38,17 +38,21 @@ def index(request):
 def product_detail_json(request, pk):
     """
     Return product details as JSON for the modal view.
+    Includes a unified all_images list.
     """
     product = get_object_or_404(Product, pk=pk)
 
-    images = [request.build_absolute_uri(img.image.url) for img in product.images.all()]
+    # Build full image URLs
+    all_images = []
+    if product.featured_image:
+        all_images.append(request.build_absolute_uri(product.featured_image.url))
+    all_images += [request.build_absolute_uri(img.image.url) for img in product.images.all()]
 
     data = {
         'id': product.id,
         'title': product.title,
         'description': product.description,
         'price': str(product.price) if product.price else None,
-        'featured_image': request.build_absolute_uri(product.featured_image.url) if product.featured_image else None,
-        'images': images,
+        'all_images': all_images,
     }
     return JsonResponse(data)
