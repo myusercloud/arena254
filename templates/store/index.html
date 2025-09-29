@@ -1,27 +1,62 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container py-4">
-  <div class="row">
-    {% for product in products %}
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 shadow-sm">
-        {% if product.featured_image %}
-          <img src="{{ product.featured_image.url }}" class="card-img-top" alt="{{ product.title }}">
-        {% endif %}
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title">{{ product.title }}</h5>
-          {% if product.price %}<p class="card-text text-muted">KSh {{ product.price }}</p>{% endif %}
-          <button class="btn btn-primary mt-auto view-product-btn"
-                  data-product-id="{{ product.id }}"
-                  data-bs-toggle="modal"
-                  data-bs-target="#productModal">
-            View Details
-          </button>
+
+  <!-- Search & Filter -->
+  <form method="get" action="{% url 'store:index' %}" class="row mb-4 g-2 align-items-center">
+    <div class="col-md-6">
+      <input type="text" name="q" class="form-control"
+             placeholder="Search products..."
+             value="{{ request.GET.q|default:'' }}">
+    </div>
+    <div class="col-md-4">
+      <select name="category" class="form-select">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+            {{ cat.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100" type="submit">Filter</button>
+    </div>
+  </form>
+
+  {% if query %}
+    <h4 class="mb-4">Search results for: <span class="text-primary">"{{ query }}"</span></h4>
+  {% endif %}
+
+  {% if products %}
+    <div class="row">
+      {% for product in products %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          {% if product.featured_image %}
+            <img src="{{ product.featured_image.url }}" class="card-img-top" alt="{{ product.title }}">
+          {% endif %}
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ product.title }}</h5>
+            {% if product.price %}
+              <p class="card-text text-muted">KSh {{ product.price }}</p>
+            {% endif %}
+            <button class="btn btn-primary mt-auto view-product-btn"
+                    data-product-id="{{ product.id }}"
+                    data-bs-toggle="modal"
+                    data-bs-target="#productModal">
+              View Details
+            </button>
+          </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
+  {% else %}
+    <div class="alert alert-warning text-center">
+      No products found{% if query %} for "<strong>{{ query }}</strong>"{% endif %}.
+    </div>
+  {% endif %}
 </div>
 
 <!-- Modal -->
