@@ -56,3 +56,7 @@ def product_detail_json(request, pk):
         'all_images': all_images,
     }
     return JsonResponse(data)
+
+
+def contact(request):
+    return render(request, 'store/contact.html')

@@ -1,186 +1,260 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container py-4">
+<!-- Use Tailwind container structure to ensure padding consistency with base.html -->
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
 
-  <!-- Search & Filter -->
-  <form method="get" action="{% url 'store:index' %}" class="row mb-4 g-2 align-items-center">
-    <div class="col-md-6">
-      <input type="text" name="q" class="form-control"
-             placeholder="Search products..."
-             value="{{ request.GET.q|default:'' }}">
-    </div>
-    <div class="col-md-4">
-      <select name="category" class="form-select">
-        <option value="">All Categories</option>
-        {% for cat in categories %}
-          <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
-            {{ cat.name }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="col-md-2">
-      <button class="btn btn-primary w-100" type="submit">Filter</button>
-    </div>
-  </form>
+    
 
-  {% if query %}
-    <h4 class="mb-4">Search results for: <span class="text-primary">"{{ query }}"</span></h4>
-  {% endif %}
+    <!-- Search Results Title -->
+    {% if query %}
+        <h2 class="text-3xl font-extrabold text-white mb-8 tracking-tight">Search results for: <span class="text-cyan-400 italic">"{{ query }}"</span></h2>
+    {% else %}
+        <h2 class="text-3xl font-extrabold text-white mb-8 tracking-tight">Our Latest Gear</h2>
+    {% endif %}
 
-  {% if products %}
-    <div class="row">
-      {% for product in products %}
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm">
-          {% if product.featured_image %}
-            <img src="{{ product.featured_image.url }}" 
-                 class="card-img-top" 
-                 alt="{{ product.title }}"
-                 loading="lazy"
-                 onerror="this.src='https://via.placeholder.com/400x300?text=No+Image';">
-          {% else %}
-            <img src="https://via.placeholder.com/400x300?text=No+Image"
-                 class="card-img-top"
-                 alt="No image available"
-                 loading="lazy">
-          {% endif %}
+    <!-- Product Grid -->
+    {% if products %}
+        <!-- Use responsive grid for better layout (3 columns on desktop, 2 on tablet, 1 on mobile) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {% for product in products %}
+            <!-- Product Card -->
+            <div class="bg-slate-800 rounded-xl overflow-hidden shadow-2xl card-hover flex flex-col border border-slate-700">
+                
+                <!-- Image Container -->
+                <div class="relative overflow-hidden h-48">
+                    {% if product.featured_image %}
+                        <img src="{{ product.featured_image.url }}" 
+                             class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" 
+                             alt="{{ product.title }}"
+                             loading="lazy"
+                             onerror="this.src='https://placehold.co/400x300/334155/ffffff?text=Image+Unavailable';">
+                    {% else %}
+                        <img src="https://placehold.co/400x300/334155/ffffff?text=No+Image"
+                             class="w-full h-full object-cover"
+                             alt="No image available"
+                             loading="lazy">
+                    {% endif %}
+                </div>
 
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ product.title }}</h5>
-            {% if product.price %}
-              <p class="card-text text-muted">KSh {{ product.price }}</p>
-            {% endif %}
-            <button class="btn btn-primary mt-auto view-product-btn"
-                    data-product-id="{{ product.id }}"
-                    data-bs-toggle="modal"
-                    data-bs-target="#productModal">
-              View Details
-            </button>
-          </div>
+                <!-- Card Body -->
+                <div class="p-5 flex flex-col flex-grow">
+                    <h3 class="text-xl font-semibold text-white truncate mb-2">{{ product.title }}</h3>
+                    {% if product.price %}
+                        <p class="text-cyan-400 font-extrabold text-2xl mt-auto mb-4">KSh {{ product.price }}</p>
+                    {% endif %}
+                    
+                    <!-- View Details Button -->
+                    <button class="bg-cyan-600 text-white font-medium py-3 rounded-lg hover:bg-cyan-500 transition-colors w-full mt-auto view-product-btn"
+                            data-product-id="{{ product.id }}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#productModal">
+                        View Details
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-      </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    <div class="alert alert-warning text-center">
-      No products found{% if query %} for "<strong>{{ query }}</strong>"{% endif %}.
-    </div>
-  {% endif %}
+    {% else %}
+        <!-- No Products Alert -->
+        <div class="bg-slate-800/50 text-slate-300 p-8 rounded-xl text-center border-l-4 border-cyan-400 shadow-lg">
+            <p class="text-xl font-medium">
+                No products found{% if query %} for "<strong class="text-cyan-400">{{ query }}</strong>"{% endif %}. Try adjusting your search or filters.
+            </p>
+        </div>
+    {% endif %}
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="productModalLabel"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body text-center">
-        
-        <!-- Main Image with Navigation -->
-        <div class="position-relative">
-          <img id="mainProductImage" class="img-fluid" alt="Product image">
-          <button id="prevImage" class="btn btn-light position-absolute top-50 start-0 translate-middle-y">
-            &#10094;
-          </button>
-          <button id="nextImage" class="btn btn-light position-absolute top-50 end-0 translate-middle-y">
-            &#10095;
-          </button>
+<!-- Modal Structure (Styled with Tailwind) -->
+<!-- The 'hidden' class will be toggled by JS when the modal is opened/closed -->
+<div class="fixed inset-0 z-50 overflow-y-auto hidden" id="productModal" tabindex="-1" aria-hidden="true" role="dialog">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/80 transition-opacity duration-300" data-bs-dismiss="modal"></div>
+    
+    <!-- Dialog Container -->
+    <div class="relative bg-slate-900 rounded-xl shadow-2xl m-4 w-full max-w-4xl mx-auto my-16 transform transition-all duration-300">
+        <div class="p-6 sm:p-8">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-start border-b border-slate-700 pb-4 mb-4">
+                <h5 class="text-3xl font-bold text-white" id="productModalLabel">Loading...</h5>
+                <button type="button" class="text-slate-400 hover:text-white transition-colors" data-bs-dismiss="modal">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Image Column -->
+                <div>
+                    <!-- Main Image with Navigation -->
+                    <div class="relative rounded-lg overflow-hidden border border-slate-700 bg-slate-800">
+                        <img id="mainProductImage" class="w-full h-auto object-contain max-h-[400px]" alt="Product image">
+                        
+                        <!-- Navigation Arrows -->
+                        <button id="prevImage" class="absolute top-1/2 left-3 -translate-y-1/2 bg-slate-700/70 text-white p-2 rounded-full hover:bg-cyan-600 transition-colors">
+                            &#10094;
+                        </button>
+                        <button id="nextImage" class="absolute top-1/2 right-3 -translate-y-1/2 bg-slate-700/70 text-white p-2 rounded-full hover:bg-cyan-600 transition-colors">
+                            &#10095;
+                        </button>
+                    </div>
+
+                    <!-- Thumbnails -->
+                    <div class="flex justify-center mt-4 flex-wrap gap-2" id="thumbnailContainer">
+                        <!-- Thumbnails will be injected here -->
+                    </div>
+                </div>
+
+                <!-- Details Column -->
+                <div class="flex flex-col">
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-2" id="productPrice"></h3>
+                    <p id="productDescription" class="mt-3 text-slate-300 flex-grow leading-relaxed"></p>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="mt-6 pt-4 border-t border-slate-700 flex justify-end">
+                <button class="bg-slate-700 text-white font-medium py-2 px-6 rounded-lg hover:bg-slate-600 transition-colors" data-bs-dismiss="modal">Close</button>
+                <!-- Add to Cart or other action buttons can go here -->
+            </div>
         </div>
-
-        <!-- Thumbnails -->
-        <div class="d-flex justify-content-center mt-3 flex-wrap" id="thumbnailContainer"></div>
-
-        <!-- Product Details -->
-        <p id="productDescription" class="mt-3"></p>
-        <p id="productPrice" class="fw-bold"></p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
     </div>
-  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const modalLabel = document.getElementById('productModalLabel');
-  const mainImage = document.getElementById('mainProductImage');
-  const productDescription = document.getElementById('productDescription');
-  const productPrice = document.getElementById('productPrice');
-  const thumbnailContainer = document.getElementById('thumbnailContainer');
-  const prevBtn = document.getElementById('prevImage');
-  const nextBtn = document.getElementById('nextImage');
+    // --- Modal DOM Elements ---
+    const productModal = document.getElementById('productModal');
+    const modalLabel = document.getElementById('productModalLabel');
+    const mainImage = document.getElementById('mainProductImage');
+    const productDescription = document.getElementById('productDescription');
+    const productPrice = document.getElementById('productPrice');
+    const thumbnailContainer = document.getElementById('thumbnailContainer');
+    const prevBtn = document.getElementById('prevImage');
+    const nextBtn = document.getElementById('nextImage');
 
-  let images = [];
-  let currentIndex = 0;
+    let images = [];
+    let currentIndex = 0;
+    const placeholderUrl = 'https://placehold.co/400x300/334155/ffffff?text=Image+Unavailable';
 
-  function updateMainImage(index) {
-    if (images.length > 0) {
-      currentIndex = index;
-      mainImage.src = images[index];
-      document.querySelectorAll('#thumbnailContainer img').forEach((thumb, idx) => {
-        thumb.classList.toggle('border-primary', idx === index);
-        thumb.classList.toggle('border', true);
-      });
+    // --- Modal Utility Functions ---
+
+    // Function to show the modal (Toggle Tailwind 'hidden' class)
+    function showModal() {
+        productModal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden'); // Prevent background scroll
     }
-  }
 
-  prevBtn.addEventListener('click', () => {
-    if (images.length) {
-      updateMainImage((currentIndex - 1 + images.length) % images.length);
+    // Function to hide the modal
+    function hideModal() {
+        productModal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
     }
-  });
 
-  nextBtn.addEventListener('click', () => {
-    if (images.length) {
-      updateMainImage((currentIndex + 1) % images.length);
+    // Function to update the main image and highlight the thumbnail
+    function updateMainImage(index) {
+        if (images.length > 0) {
+            currentIndex = index;
+            mainImage.src = images[index] || placeholderUrl;
+            
+            // Update thumbnail highlight
+            document.querySelectorAll('#thumbnailContainer img').forEach((thumb, idx) => {
+                if (idx === index) {
+                    thumb.classList.add('border-cyan-400', 'ring-2', 'ring-cyan-400');
+                    thumb.classList.remove('border-transparent');
+                } else {
+                    thumb.classList.remove('border-cyan-400', 'ring-2', 'ring-cyan-400');
+                    thumb.classList.add('border-transparent');
+                }
+            });
+
+            // Toggle navigation visibility
+            prevBtn.classList.toggle('hidden', images.length <= 1);
+            nextBtn.classList.toggle('hidden', images.length <= 1);
+        } else {
+             mainImage.src = placeholderUrl;
+             prevBtn.classList.add('hidden');
+             nextBtn.classList.add('hidden');
+        }
     }
-  });
 
-  document.querySelectorAll('.view-product-btn').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const id = btn.dataset.productId;
-      try {
-        const res = await fetch(`/api/product/${id}/`);
-        if (!res.ok) throw new Error('Network error');
-        const data = await res.json();
-
-        modalLabel.textContent = data.title;
-        productDescription.textContent = data.description || '';
-        productPrice.textContent = data.price ? `KSh ${data.price}` : '';
-
-        images = data.all_images || [];
-
-
-        // Load thumbnails
-        thumbnailContainer.innerHTML = '';
-        images.forEach((src, idx) => {
-          const thumb = document.createElement('img');
-          thumb.src = src;
-          thumb.className = 'img-thumbnail m-1';
-          thumb.style.width = '80px';
-          thumb.style.cursor = 'pointer';
-          thumb.addEventListener('click', () => updateMainImage(idx));
-          thumbnailContainer.appendChild(thumb);
-        });
-
-        updateMainImage(0);
-
-      } catch (err) {
-        modalLabel.textContent = 'Error';
-        productDescription.textContent = 'Could not load product details.';
-        productPrice.textContent = '';
-        mainImage.src = '';
-        thumbnailContainer.innerHTML = '';
-        console.error(err);
-      }
+    // --- Event Listeners for Modal Navigation ---
+    
+    // Cycle backward
+    prevBtn.addEventListener('click', () => {
+        if (images.length) {
+            updateMainImage((currentIndex - 1 + images.length) % images.length);
+        }
     });
-  });
+
+    // Cycle forward
+    nextBtn.addEventListener('click', () => {
+        if (images.length) {
+            updateMainImage((currentIndex + 1) % images.length);
+        }
+    });
+
+    // Close Modal listeners (simulating Bootstrap data-bs-dismiss)
+    document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(el => {
+        el.addEventListener('click', hideModal);
+    });
+
+
+    // --- Product Details Fetch Logic ---
+
+    document.querySelectorAll('.view-product-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = btn.dataset.productId;
+            
+            // Show loading state and open modal immediately
+            modalLabel.textContent = 'Loading Product...';
+            productDescription.textContent = '';
+            productPrice.textContent = '';
+            mainImage.src = placeholderUrl;
+            thumbnailContainer.innerHTML = '';
+            images = [];
+            showModal(); 
+            
+            try {
+                // Ensure the API path is correct (e.g., /api/product/123/)
+                const res = await fetch(`/api/product/${id}/`); 
+                if (!res.ok) throw new Error('Network response was not ok');
+                const data = await res.json();
+
+                // Update details
+                modalLabel.textContent = data.title;
+                productDescription.textContent = data.description || 'No description provided.';
+                productPrice.textContent = data.price ? `KSh ${data.price}` : 'Price not listed.';
+
+                // Prepare images array, ensuring featured image is first if multiple exist
+                images = (data.all_images && data.all_images.length > 0) ? data.all_images : [data.featured_image].filter(Boolean);
+
+                // Clear and load thumbnails
+                thumbnailContainer.innerHTML = '';
+                images.forEach((src, idx) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = src;
+                    // Tailwind classes for thumbnails
+                    thumb.className = 'w-20 h-16 object-cover rounded-md cursor-pointer border-2 border-transparent transition-all duration-200 hover:border-cyan-400';
+                    thumb.addEventListener('click', () => updateMainImage(idx));
+                    thumbnailContainer.appendChild(thumb);
+                });
+
+                // Set initial main image
+                updateMainImage(0);
+
+            } catch (err) {
+                // Handle fetch error
+                modalLabel.textContent = 'Error Loading Product';
+                productDescription.textContent = 'Could not load product details. Please try again.';
+                productPrice.textContent = '';
+                images = [];
+                updateMainImage(0); // Show placeholder image
+                console.error('Error fetching product details:', err);
+            }
+        });
+    });
 });
 </script>
 {% endblock %}
