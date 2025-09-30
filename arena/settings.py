@@ -1,6 +1,7 @@
 # arena/settings.py
 import os
 from pathlib import Path
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -59,16 +60,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'arena.wsgi.application'
 
 # Database
+
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'shopdb'),
-        'USER': os.environ.get('POSTGRES_USER', 'shopuser'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'shopsecret'),
-        'HOST': os.environ.get('DATABASE_HOST', 'db'),
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
 }
+
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
