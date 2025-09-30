@@ -5,3 +5,5 @@ Pillow>=11.3.0
 python-dotenv>=1.1.1
 whitenoise==6.11.0
 dj-database-url
+django-cloudinary-storage
+cloudinary
