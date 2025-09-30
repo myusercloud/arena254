@@ -2,6 +2,12 @@
 import os
 from pathlib import Path
 import dj_database_url
+from django.conf import settings
+
+
+def debug(request):
+    return {"debug": settings.DEBUG}
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -54,6 +60,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'arena.context_processors.debug',  # Custom context processor
             ],
         },
     },
