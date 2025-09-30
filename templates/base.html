@@ -4,21 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena254</title>
+    <title>{% block title %}Arena 254{% endblock %}</title>
 
+    <meta name="description" content="Shop the best sports equipment online – from footballs, football jerseys and basketballs to gym gear and outdoor sports essentials to trainers and traning kits. Quality products, fast delivery, and great prices.">
+    <meta name="keywords" content="sports equipment, athletic gear, fitness products, outdoor sports, gym equipment, sportswear, exercise gear">
+    <meta name="author" content="Arena 254">
 
+    <!-- Favicons -->
     <link rel="icon" href="{% static 'store/favicon.ico' %}" type="image/x-icon">
     <link rel="icon" href="{% static 'store/favicon-96x96.png' %}" type="image/png" sizes="96x96">
-
-
-
-    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'store/favicon-96x96.png' %}">
     <link rel="icon" type="image/svg+xml" href="{% static 'store/favicon.svg' %}">
     <link rel="shortcut icon" href="{% static 'store/favicon.ico' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'store/apple-touch-icon.png' %}">
     <link rel="manifest" href="{% static 'store/site.webmanifest' %}">
 
-    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -31,15 +30,15 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a; /* Dark blue-gray background */
-            color: #cbd5e1; /* Light gray text for readability */
+            background-color: #111827;
+            color: #e2e8f0;
         }
         .nav-link-hover::after {
             content: '';
             display: block;
             width: 0;
             height: 2px;
-            background: #22d3ee; /* Cyan accent */
+            background: #22d3ee;
             transition: width .3s;
         }
         .nav-link-hover:hover::after {
@@ -56,126 +55,151 @@
 </head>
 <body class="antialiased">
 
-    <!-- Navbar -->
-    <header class="bg-slate-900/80 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-800">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <div class="flex-shrink-0">
-                    <a href="/" class="flex items-center space-x-2">
-                        <svg class="h-8 w-8 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.024.217 1.464l-.657.985a1.125 1.125 0 0 1-1.667-.985V5.655a2.25 2.25 0 0 1 .921-1.77l.954-.681a.75.75 0 0 0-.921-1.182h-1.631a.75.75 0 0 0-.69.458l-.622 1.244a.75.75 0 0 0 .69 1.058h2.084a.75.75 0 0 0 .75-.75V3.03a.75.75 0 0 0-1.5 0Zm-3 0v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.024.217 1.464l-.657.985a1.125 1.125 0 0 1-1.667-.985V5.655a2.25 2.25 0 0 1 .921-1.77l.954-.681a.75.75 0 0 0-.921-1.182H7.25a.75.75 0 0 0-.69.458l-.622 1.244a.75.75 0 0 0 .69 1.058h2.084a.75.75 0 0 0 .75-.75V3.03a.75.75 0 0 0-1.5 0Z" />
-                             <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 9.75v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.024.217 1.464l-.657.985a1.125 1.125 0 0 1-1.667-.985V11.655a2.25 2.25 0 0 1 .921-1.77l.954-.681a.75.75 0 0 0-.921-1.182h-1.631a.75.75 0 0 0-.69.458l-.622 1.244a.75.75 0 0 0 .69 1.058h2.084a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-1.5 0Zm-3 0v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.024.217 1.464l-.657.985a1.125 1.125 0 0 1-1.667-.985V11.655a2.25 2.25 0 0 1 .921-1.77l.954-.681a.75.75 0 0 0-.921-1.182h-1.631a.75.75 0 0 0-.69.458l-.622 1.244a.75.75 0 0 0 .69 1.058h2.084a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-1.5 0Z" />
-                        </svg>
-                        <span class="font-bold text-xl text-white">Arena 254</span>
-                    </a>
-                </div>
+<!-- Navbar -->
+<header class="bg-slate-900/80 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-800">
+  <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href="/" class="flex items-center space-x-2">
+          <img src="{% static 'store/arena254logo.png' %}" alt="Arena 254 Logo" class="h-8 w-8 object-contain">
+          <span class="font-bold text-xl text-white">Arena 254</span>
+        </a>
+      </div>
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-slate-300 hover:text-cyan-400 transition-colors font-medium nav-link-hover">Home</a>
-                    <a href="{% url 'store:contact' %}" class="text-slate-300 hover:text-cyan-400 transition-colors font-medium nav-link-hover">Contact</a>
-                </div>
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="/" class="font-medium nav-link-hover transition-colors {% if request.resolver_match.url_name == 'index' %} text-cyan-400 border-b-2 border-cyan-400 {% else %} text-slate-300 hover:text-cyan-400 {% endif %}">Home</a>
+        <a href="{% url 'store:contact' %}" class="font-medium nav-link-hover transition-colors {% if request.resolver_match.url_name == 'contact' %} text-cyan-400 border-b-2 border-cyan-400 {% else %} text-slate-300 hover:text-cyan-400 {% endif %}">Contact</a>
+        <!-- Optional: Instagram icon -->
+        <a href="https://instagram.com/are_na254" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-400 transition-colors">Instagram</a>
+      </div>
 
-                <!-- Search and Icons -->
-                <div class="flex items-center space-x-4">
-                    <form class="hidden sm:flex" role="search" method="get" action="{% url 'store:index' %}">
-                        <div class="relative">
-                            <input class="form-control bg-slate-800 border border-slate-700 text-white rounded-full py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-cyan-500" type="search" name="q" placeholder="Search...">
-                            <button type="submit" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400 hover:text-cyan-400">
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd" /></svg>
-                            </button>
-                        </div>
-                    </form>
+      <!-- Mobile Hamburger Button -->
+      <div class="md:hidden flex items-center">
+        <button id="mobile-menu-button" class="text-slate-300 hover:text-cyan-400 focus:outline-none">
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
 
-                </div>
-            </div>
-        </nav>
-    </header>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden max-h-0 overflow-hidden transition-all duration-500 mt-2 space-y-3">
+      <!-- Links -->
+      <a href="/" class="block px-3 py-2 text-slate-300 hover:text-cyan-400 rounded">Home</a>
+      <a href="{% url 'store:contact' %}" class="block px-3 py-2 text-slate-300 hover:text-cyan-400 rounded">Contact</a>
+      
+      <!-- Search Bar -->
+      <form method="get" action="{% url 'store:index' %}" class="px-3">
+        <input type="search" name="q" placeholder="Search..."
+               class="w-full bg-slate-800 border border-slate-700 text-white rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+      </form>
 
-    <!-- Main Content -->
-    <main>
-        <!-- This is where your dynamic Django content will be rendered. -->
-        <!-- Below is placeholder content to demonstrate the new UI. -->
+      <!-- Instagram Link -->
+      <a href="https://instagram.com/are_na254" target="_blank" rel="noopener noreferrer"
+         class="block px-3 py-2 text-slate-400 hover:text-cyan-400 rounded">
+        Instagram
+      </a>
+    </div>
+  </nav>
+</header>
+
+<!-- Main Content -->
+<main>
+    <section class="relative h-[45vh] flex items-center justify-center text-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://placehold.co/1920x1080/0f172a/334155?text=ARENA" alt="Abstract sports background" class="w-full h-full object-cover opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent"></div>
+        </div>
+        <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">{% block page_heading %}Unleash Your Potential{% endblock %}</h1>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+                <span class="block text-cyan-400">Gear Up for Greatness</span>
+            </h1>
+            <p class="mt-6 max-w-2xl mx-auto text-lg text-slate-300">
+                Discover premium athletic wear and equipment designed to elevate your performance.
+            </p>
+            <p class="mt-6 max-w-2xl mx-auto text-lg text-slate-300">
+                Instagram: <a href="https://instagram.com/are_na254" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">@are_na254</a>
+            </p>
+        </div>
+    </section>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-slate-900 border-t border-slate-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <!-- Brand Info -->
+        <div class="col-span-2 md:col-span-1">
+            <a href="/" class="flex items-center space-x-2">
+                <svg class="h-8 w-8 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.024.217 1.464l-.657.985a1.125 1.125 0 0 1-1.667-.985V5.655a2.25 2.25 0 0 1 .921-1.77l.954-.681a.75.75 0 0 0-.921-1.182h-1.631a.75.75 0 0 0-.69.458l-.622 1.244a.75.75 0 0 0 .69 1.058h2.084a.75.75 0 0 0 .75-.75V3.03a.75.75 0 0 0-1.5 0Z" />
+                </svg>
+                <span class="font-bold text-xl text-white">Arena254 Store</span>
+            </a>
+            <p class="mt-4 text-sm text-slate-400">Premium gear for the dedicated athlete.</p>
+        </div>
+
         
-        <!-- Hero Section - Reduced height from h-[60vh] to h-[45vh] -->
-        <section class="relative h-[45vh] flex items-center justify-center text-center overflow-hidden">
-            <div class="absolute inset-0 z-0">
-                <img src="https://placehold.co/1920x1080/0f172a/334155?text=ARENA" alt="Abstract sports background" class="w-full h-full object-cover opacity-60">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent"></div>
-            </div>
-            <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                    <span class="block">Unleash Your Potential</span>
-                    <span class="block text-cyan-400">Gear Up for Greatness</span>
-                </h1>
-                <p class="mt-6 max-w-2xl mx-auto text-lg text-slate-300">
-                    Discover premium athletic wear and equipment designed to elevate your performance.
-                </p>
-                
-            </div>
-        </section>
 
-        
-        <!-- Your Django content block -->
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {% block content %}{% endblock %}
+        <!-- Support Links -->
+        <div>
+            <h3 class="font-semibold text-white">Support</h3>
+            <ul class="mt-4 space-y-2">
+                <li><a href="{% url 'store:contact' %}" class="text-slate-400 hover:text-cyan-400 transition-colors">Contact details</a></li>
+            </ul>
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 border-t border-slate-800">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
-            <!-- Brand Info -->
-            <div class="col-span-2 md:col-span-1">
-                 <a href="/" class="flex items-center space-x-2">
-                    <svg class="h-8 w-8 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                         <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.024.217 1.464l-.657.985a1.125 1.125 0 0 1-1.667-.985V5.655a2.25 2.25 0 0 1 .921-1.77l.954-.681a.75.75 0 0 0-.921-1.182h-1.631a.75.75 0 0 0-.69.458l-.622 1.244a.75.75 0 0 0 .69 1.058h2.084a.75.75 0 0 0 .75-.75V3.03a.75.75 0 0 0-1.5 0Zm-3 0v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.024.217 1.464l-.657.985a1.125 1.125 0 0 1-1.667-.985V5.655a2.25 2.25 0 0 1 .921-1.77l.954-.681a.75.75 0 0 0-.921-1.182H7.25a.75.75 0 0 0-.69.458l-.622 1.244a.75.75 0 0 0 .69 1.058h2.084a.75.75 0 0 0 .75-.75V3.03a.75.75 0 0 0-1.5 0Z" />
-                         <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 9.75v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.024.217 1.464l-.657.985a1.125 1.125 0 0 1-1.667-.985V11.655a2.25 2.25 0 0 1 .921-1.77l.954-.681a.75.75 0 0 0-.921-1.182h-1.631a.75.75 0 0 0-.69.458l-.622 1.244a.75.75 0 0 0 .69 1.058h2.084a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-1.5 0Zm-3 0v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.024.217 1.464l-.657.985a1.125 1.125 0 0 1-1.667-.985V11.655a2.25 2.25 0 0 1 .921-1.77l.954-.681a.75.75 0 0 0-.921-1.182h-1.631a.75.75 0 0 0-.69.458l-.622 1.244a.75.75 0 0 0 .69 1.058h2.084a.75.75 0 0 0 .75-.75V9.75a.75.75 0 0 0-1.5 0Z" />
-                    </svg>
-                    <span class="font-bold text-xl text-white">Arena Store</span>
-                </a>
-                <p class="mt-4 text-sm text-slate-400">Premium gear for the dedicated athlete.</p>
-            </div>
-            <!-- Links -->
-            <div>
-                <h3 class="font-semibold text-white">Shop</h3>
-                <ul class="mt-4 space-y-2">
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Apparel</a></li>
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Footwear</a></li>
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Equipment</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="font-semibold text-white">Support</h3>
-                <ul class="mt-4 space-y-2">
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Contact Us</a></li>
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">FAQ</a></li>
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Shipping</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="font-semibold text-white">Legal</h3>
-                <ul class="mt-4 space-y-2">
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Privacy Policy</a></li>
-                    <li><a href="#" class="text-slate-400 hover:text-cyan-400 transition-colors">Terms of Service</a></li>
-                </ul>
+        <!-- Contact & Location -->
+        <div>
+            <h3 class="font-semibold text-white">Contact & Location</h3>
+            <ul class="mt-4 space-y-2 text-slate-400 text-sm">
+                <li>📞 Phone: +254715241382</li>
+                <li>✉️ Email: support@arenastore254.com</li>
+                <li>📍 Address: Nairobi city centre mall, 2nd floor shop 216, Nairobi, Kenya</li>
+                <li>🕒 Hours: Mon–Fri 8:00am–6:00pm</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bg-slate-900/50 py-4 border-t border-slate-800">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
+            <p class="text-sm text-slate-500">&copy; 2025 Arena Store. All Rights Reserved.</p>
+            <div class="mt-2 sm:mt-0 space-x-4">
+                <a href="https://instagram.com/are_na254" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-cyan-400 transition-colors">Instagram</a>
             </div>
         </div>
-        <!-- Bottom Bar -->
-        <div class="bg-slate-900/50 py-4 border-t border-slate-800">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
-                <p class="text-sm text-slate-500">&copy; 2025 Arena Store. All Rights Reserved.</p>
-                <div class="flex space-x-4 mt-4 sm:mt-0">
-                    <a href="#" class="text-slate-500 hover:text-white"><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path></svg></a>
-                    <a href="#" class="text-slate-500 hover:text-white"><svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.636 7.855 6.356 9.312-.087-.79-.167-2.005.035-2.868.182-.78.932-3.944.932-3.944s-.229-.457-.229-1.141c0-1.071.614-1.875 1.386-1.875.653 0 .967.49.967 1.075 0 .653-.417 1.631-.623 2.544-.171.745.373 1.355 1.107 1.355 1.328 0 2.368-1.401 2.368-3.437 0-1.785-1.273-3.064-3.14-3.064-2.165 0-3.441 1.62-3.441 3.257 0 .641.246 1.328.557 1.731.063.081.074.148.054.232-.057.243-.187.782-.217.903-.038.15-.171.196-.328.113-1.273-.522-2.088-2.012-2.088-3.665 0-2.774 2.031-5.263 5.866-5.263 3.073 0 5.253 2.191 5.253 4.958 0 3.01-1.883 5.372-4.482 5.372-1.076 0-2.082-.56-2.438-1.222l-.724 2.768c-.272 1.047-.983 2.348-1.488 3.145C9.57 21.82 10.762 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" clip-rule="evenodd"></path></svg></a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    </div>
+</footer>
 
-    <!-- Your Django scripts block -->
-    {% block scripts %}{% endblock %}
+
+<!-- Scripts -->
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const btn = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');       // Instant fallback
+        menu.classList.toggle('max-h-0');      // Collapse
+        menu.classList.toggle('max-h-screen'); // Expand
+        menu.classList.toggle('overflow-hidden');
+        menu.classList.toggle('transition-all');
+        menu.classList.toggle('duration-500');
+    });
+});
+</script>
+
+{% endblock %}
 
 </body>
 </html>
