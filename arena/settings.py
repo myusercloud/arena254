@@ -5,8 +5,11 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'unsafe-dev-secret')
-DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
-ALLOWED_HOSTS = ['*']  # dev only
+
+
+DEBUG = os.environ.get('DJANGO_DEBUG', '0') == '1'
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
